@@ -9,21 +9,21 @@ class Deck():
     pile, and a discard pile. The first of these is a set, and the other two
     are lists. (The first card in each list is the top card of that pile.)
     """
-    def __init__(self, player_name, populator=populators.basePopulator):
+    def __init__(self, playerName, populator=populators.basePopulator):
         super().__init__()
-        self.player_name = player_name
-        self.discard_pile = []
-        self.play_area = set()
+        self.playerName = playerName
+        self.discardPile = []
+        self.playArea = set()
         self.hand = set()
         if populator:
-            self.draw_pile = populator(self)
+            self.drawPile = populator(self)
         else:
-            self.draw_pile = []
+            self.drawPile = []
 
-    def cards_with_keyword(self, keyword):
+    def cardsWithKeyword(self, keyword):
         return [ c for c in self.hand if keyword in c.keywords ]
 
-    def draw_hand(self):
+    def drawHand(self):
         '''
         Draw the requisite number of cards for a new hand, triggering a
         shuffle if necessary. Note that this method does not assume the hand
@@ -36,21 +36,21 @@ class Deck():
         Draw some number of cards (default 1) to the user's hand, triggering
         a shuffle if necessary. Also return the cards in a list.
         '''
-        drawn_cards = []
+        drawnCards = []
         for _ in range(num):
-            if len(self.draw_pile) == 0:
-                self.draw_pile = self.discard_pile
-                random.shuffle(self.draw_pile)
-                self.discard_pile = []
-            drawn_cards.append(self.draw_pile.pop(0))
-        self.hand |= set(drawn_cards)
-        return drawn_cards
+            if len(self.drawPile) == 0:
+                self.drawPile = self.discardPile
+                random.shuffle(self.drawPile)
+                self.discardPile = []
+            drawnCards.append(self.drawPile.pop(0))
+        self.hand |= set(drawnCards)
+        return drawnCards
 
     def __str__(self):
         ret_val = self.player_name + "'s deck:\n" + \
             "  Hand:\n" + self.render(self.hand) + "\n" + \
-            "  Draw pile:\n" + self.render(self.draw_pile) + "\n" + \
-            "  Discard pile:\n" + self.render(self.discard_pile)
+            "  Draw pile:\n" + self.render(self.drawPile) + "\n" + \
+            "  Discard pile:\n" + self.render(self.discardPile)
         return ret_val
 
     def render(self, cards):

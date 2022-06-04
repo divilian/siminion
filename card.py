@@ -20,5 +20,5 @@ class Card():
         the play area.
         '''
         print(f"Playing {self}...")
-        self.deck.play_area |= { self }
+        self.deck.playArea |= { self }
         self.deck.hand -= { self }

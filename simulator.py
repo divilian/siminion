@@ -10,10 +10,10 @@ if __name__ == "__main__":
     print(rat)
     print("===========================================")
     print("After initial draw:")
-    rat.draw_hand()
+    rat.drawHand()
     print(rat)
     input("\n(Press ENTER to continue.)")
-    while len(rat.draw_pile) > 0:
+    while len(rat.drawPile) > 0:
         print("After next draw:")
         rat.draw()
         print(rat)
@@ -26,7 +26,7 @@ if __name__ == "__main__":
     three_fours = 0
     for _ in range(NUM_TRIALS):
         deck = Deck("test")
-        deck.draw_hand()
+        deck.drawHand()
         num_estates = sum([ type(x) is Estate for x in deck.hand ])
         if num_estates in [0,3]:
             two_fives += 1
