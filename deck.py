@@ -13,11 +13,15 @@ class Deck():
         super().__init__()
         self.player_name = player_name
         self.discard_pile = []
+        self.play_area = set()
         self.hand = set()
         if populator:
-            self.draw_pile = populator()
+            self.draw_pile = populator(self)
         else:
             self.draw_pile = []
+
+    def cards_with_keyword(self, keyword):
+        return [ c for c in self.hand if keyword in c.keywords ]
 
     def draw_hand(self):
         '''
