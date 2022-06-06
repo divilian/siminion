@@ -1,21 +1,31 @@
 
 import random
 from deck import Deck
+from strategies import *
+from populators import basePopulator
+import logging
 
 class Player():
-    def __init__(self, playerName):
+    def __init__(self, playerName, topActionLayer, topBuyLayer,
+        populator=basePopulator):
+        '''playerName is a string. topActionLayer and topBuyLayer are each the
+           top item in two Decorator-pattern hierarchies, specifying the
+           player's strategy.'''
         self.playerName = playerName
-        self.deck = Deck(playerName)
+        self.topActionLayer = topActionLayer
+        self.topBuyLayer = topBuyLayer
+        self.deck = Deck(populator)
     def doActionPhase(self):
-        actionCards = self.deck.cardsWithKeyword("Action")
-        print(f"Here are the acs: {actionCards}")
-        for ac in actionCards:
-            ac.play()
+        logging.debug(f"Doing {self.playerName}'s action phase...")
+        self.topActionLayer.play()
     def doBuyPhase(self):
-        treasureCards = self.deck.cardsWithKeyword("Treasure")
-        print(f"Here are the tcs: {treasureCards}")
-        for tc in treasureCards:
-            tc.play()
+        logging.debug(f"Doing {self.playerName}'s buy phase...")
+        self.topBuyLayer.play()
+    def getVPTotal(self):
+        return self.deck.getVPTotal()
+    def __str__(self):
+        return self.playerName + ", with deck:\n" + str(self.deck)
+
 
 if __name__ == "__main__":
     lr = Player("Lord Rattington")

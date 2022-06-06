@@ -8,7 +8,6 @@ from kingdom import Kingdom, empty3PlyrBaseKingdom
 
 class Simulation():
 
-
     def __init__(self, players, kingdom):
         '''players is a set of Player objects. kingdom is a Kingdom.'''
         self.MAX_TURNS = 5   # After more turns than this, force-stop sim.
