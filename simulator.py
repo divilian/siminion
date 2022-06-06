@@ -29,11 +29,11 @@ if __name__ == "__main__":
     for _ in range(NUM_TRIALS):
         deck = Deck("test")
         deck.drawHand()
-        num_estates = sum([ type(x) is Estate for x in deck.hand ])
-        if num_estates in [0,3]:
+        numEstates = sum([ type(x) is Estate for x in deck.hand ])
+        if numEstates in [0,3]:
             two_fives += 1
-        elif num_estates in [1,2]:
+        elif numEstates in [1,2]:
             three_fours += 1
         else:
-            stop(f"WHOA! Got {num_estates} estates in initial draw.")
+            stop(f"WHOA! Got {numEstates} estates in initial draw.")
     print(f"There were {(two_fives/NUM_TRIALS*100):.1f}% 2/5 splits.")
