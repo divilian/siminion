@@ -13,8 +13,11 @@ class Player():
            player's strategy.'''
         self.playerName = playerName
         self.topActionLayer = topActionLayer
+        self.topActionLayer.player = self   # Add reverse pointer
         self.topBuyLayer = topBuyLayer
-        self.deck = Deck(populator)
+        self.topBuyLayer.player = self      # Add reverse pointer
+        self.deck = Deck(self, populator)
+        self.numCoins = 0   # The currently "played" number of coins this turn
     def doActionPhase(self):
         logging.debug(f"Doing {self.playerName}'s action phase...")
         self.topActionLayer.play()

@@ -14,6 +14,12 @@ class Card():
         '''
         return 0
 
+    def cost(self):
+        '''
+        Returns the number of coins required to buy this card.
+        '''
+        return 0
+
     def play(self):
         '''
         The default "play" behavior is simply to move the card from the hand to

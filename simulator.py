@@ -4,7 +4,7 @@ from victories import Estate
 
 if __name__ == "__main__":
     print("1. Demonstrate deck construction and draw.")
-    ratDeck = Deck("Lord Rattington")
+    ratDeck = Deck("Lord Rattington", None)   # No need for Player object
     print("===========================================")
     print("Original deck:")
     print(ratDeck)
@@ -27,7 +27,7 @@ if __name__ == "__main__":
     two_fives = 0
     three_fours = 0
     for _ in range(NUM_TRIALS):
-        deck = Deck("test")
+        deck = Deck("test", None)   # No need for Player object
         deck.drawHand()
         numEstates = sum([ type(x) is Estate for x in deck.hand ])
         if numEstates in [0,3]:

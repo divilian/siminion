@@ -8,8 +8,9 @@ class Deck():
     pile, and a discard pile. The first of these is a set, and the other two
     are lists. (The first card in each list is the top card of that pile.)
     """
-    def __init__(self, populator=populators.basePopulator):
+    def __init__(self, player, populator=populators.basePopulator):
         super().__init__()
+        self.player = player
         self.discardPile = []
         self.playArea = set()
         self.hand = set()
