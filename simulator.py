@@ -4,19 +4,21 @@ from victories import Estate
 
 if __name__ == "__main__":
     print("1. Demonstrate deck construction and draw.")
-    rat = Deck("Lord Rattington")
+    ratDeck = Deck("Lord Rattington")
     print("===========================================")
     print("Original deck:")
-    print(rat)
+    print(ratDeck)
+    print("===========================================")
+    print(f"The deck has {ratDeck.getVPTotal()} VPs.")
     print("===========================================")
     print("After initial draw:")
-    rat.drawHand()
-    print(rat)
+    ratDeck.drawHand()
+    print(ratDeck)
     input("\n(Press ENTER to continue.)")
-    while len(rat.drawPile) > 0:
+    while len(ratDeck.drawPile) > 0:
         print("After next draw:")
-        rat.draw()
-        print(rat)
+        ratDeck.draw()
+        print(ratDeck)
         input("\n(Press ENTER to continue.)")
 
     print("\n\n")
