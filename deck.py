@@ -2,16 +2,14 @@
 import random
 import populators
 
-
 class Deck():
     """
     The "deck" for a particular player, which is comprised of a hand, a draw
     pile, and a discard pile. The first of these is a set, and the other two
     are lists. (The first card in each list is the top card of that pile.)
     """
-    def __init__(self, playerName, populator=populators.basePopulator):
+    def __init__(self, populator=populators.basePopulator):
         super().__init__()
-        self.playerName = playerName
         self.discardPile = []
         self.playArea = set()
         self.hand = set()
@@ -46,9 +44,13 @@ class Deck():
         self.hand |= set(drawnCards)
         return drawnCards
 
+    def getVPTotal(self):
+        return sum([ c.VPs()
+            for c in self.hand | self.playArea | set(self.discardPile) |
+                set(self.drawPile) ])
+
     def __str__(self):
-        ret_val = self.player_name + "'s deck:\n" + \
-            "  Hand:\n" + self.render(self.hand) + "\n" + \
+        ret_val = "  Hand:\n" + self.render(self.hand) + "\n" + \
             "  Draw pile:\n" + self.render(self.drawPile) + "\n" + \
             "  Discard pile:\n" + self.render(self.discardPile)
         return ret_val
