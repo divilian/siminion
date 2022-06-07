@@ -29,9 +29,9 @@ class Simulation():
         logging.info("==========================================")
         while (numTurns < self.MAX_TURNS and
                 not self.kingdom.finished(len(self.players))):
+            player = self.players[playerTurn]
             logging.info(f"Beginning player {playerTurn}'s " +
                 f"({player.playerName}'s) turn {numTurns}")
-            player = self.players[playerTurn]
             player.doActionPhase()
             player.doBuyPhase()
             logging.debug(f"{player.playerName}'s deck is now:\n{player.deck}")
