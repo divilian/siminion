@@ -19,7 +19,7 @@ class Deck():
         else:
             self.drawPile = []
 
-    def cardsWithKeyword(self, keyword):
+    def cardsInHandWithKeyword(self, keyword):
         return [ c for c in self.hand if keyword in c.keywords ]
 
     def drawHand(self):

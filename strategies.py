@@ -20,7 +20,7 @@ class RandomActionLayer(ActionLayer):
         super().__init__()
     def play(self, numStartingActions=1):
         '''Play action cards at random until no more actions remain.'''
-        actionCards = self.player.deck.cardsWithKeyword("Action")
+        actionCards = self.player.deck.cardsInHandWithKeyword("Action")
         numActions = numStartingActions
         for ac in actionCards:
             ac.play()
@@ -48,7 +48,7 @@ class GreedyBuyLayer(BuyLayer):
         super().__init__(player)
     def play(self, numStartingBuys=1):
         '''Play all treasure cards.'''
-        treasureCards = self.player.deck.cardsWithKeyword("Treasure")
+        treasureCards = self.player.deck.cardsInHandWithKeyword("Treasure")
         for tc in treasureCards:
             tc.play()
         numBuys = numStartingBuys
