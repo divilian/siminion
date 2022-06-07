@@ -53,10 +53,12 @@ class GreedyBuyLayer(BuyLayer):
         numBuys = numStartingBuys
         targets = self.getBuyTargets()
         for target in targets:
-            while numBuys >= 1 and target.cost() <= self.player.numCoins:
+            while (numBuys >= 1 and target.cost() <= self.player.numCoins
+                    and self.player.kingdom.available(target) > 0):
                 logging.debug(
                     f"{self.player.playerName} buys a {target.__name__}")
-                self.player.deck.gain(target(self.player.deck))
+                self.player.deck.gain(self.player.kingdom.take(target,
+                    self.player.deck))
                 self.player.numCoins -= target.cost()
                 numBuys -= 1
     def getBuyTargets(self):

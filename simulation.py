@@ -16,6 +16,8 @@ class Simulation():
         self.players = list(players)
         random.shuffle(self.players)   # Players start in random order
         self.kingdom = kingdom
+        for player in self.players:
+            player.setKingdom(self.kingdom)   # TODO: yuck?
 
     def play(self):
         '''Run one simulated game. This returns a tuple with two pieces of
@@ -43,6 +45,9 @@ class Simulation():
             logging.debug(f"{player.playerName}'s deck is now:\n{player.deck}")
             playerTurn = (playerTurn + 1) % len(self.players)
             if playerTurn == 0:
+                logging.info(", ".join(
+                    [ f"{p.playerName}: {p.deck.getVPTotal()}"
+                      for p in self.players ]))
                 logging.info("==========================================")
                 numTurns += 1
             logging.info("------------------------------------------")

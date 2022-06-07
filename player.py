@@ -26,12 +26,8 @@ class Player():
         self.topBuyLayer.play()
     def getVPTotal(self):
         return self.deck.getVPTotal()
+    def setKingdom(self, kingdom):
+        self.kingdom = kingdom
     def __str__(self):
         return self.playerName + ", with deck:\n" + str(self.deck)
 
-
-if __name__ == "__main__":
-    lr = Player("Lord Rattington")
-    lr.deck.drawHand()
-    lr.doActionPhase()
-    lr.doBuyPhase()

@@ -21,6 +21,15 @@ class Kingdom():
         else:
             return False
 
+    def take(self, card, toDeck):
+        '''Take a card of the Card class passed from this Kingdom, assuming
+           one still exists. (Assertion exception raised if not.)'''
+        return self.piles[card.__name__].take(toDeck)
+
+    def available(self, card):
+        '''Return the number of cards left of the Card class passed.'''
+        return self.piles[card.__name__].numRemaining
+
 empty3PlyrBaseKingdom = Kingdom(
     { Province:12, Duchy:12, Estate:12,
       Gold:30, Silver:40, Copper:40 })
