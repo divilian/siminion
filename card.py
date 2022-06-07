@@ -26,6 +26,5 @@ class Card():
         The default "play" behavior is simply to move the card from the hand to
         the play area.
         '''
-        print(f"Playing {self}...")
         self.deck.playArea |= { self }
         self.deck.hand -= { self }

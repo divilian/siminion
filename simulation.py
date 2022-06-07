@@ -5,12 +5,13 @@ import random
 import logging
 from strategies import *
 from kingdom import Kingdom, empty3PlyrBaseKingdom
+import sys
 
 class Simulation():
 
-    def __init__(self, players, kingdom):
+    def __init__(self, players, kingdom, max_turns=5):
         '''players is a set of Player objects. kingdom is a Kingdom.'''
-        self.MAX_TURNS = 5   # After more turns than this, force-stop sim.
+        self.MAX_TURNS = max_turns   # After more than this, force-stop sim.
         self.players = list(players)
         random.shuffle(self.players)   # Players start in random order
         self.kingdom = kingdom
@@ -47,10 +48,29 @@ class Simulation():
         return f"a {len(self.players)}-player simulation"
 
 
+def printUsage():
+    print("Usage: simulation.py\n"
+        "    [log_level=INFO|DEBUG]\n"
+        "    [max_turns=#].")
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
+    log_level = logging.INFO
+    max_turns = 5
+    for arg in sys.argv[1:]:
+        if "=" not in arg:
+            printUsage()
+            sys.exit(f"Bad arg '{arg}'")
+        elif arg.startswith("log_level"):
+            log_level = getattr(logging, arg.split("=")[1])
+        elif arg.startswith("max_turns"):
+            max_turns = int(arg.split("=")[1])
+        else:
+            printUsage()
+            sys.exit(f"Bad arg '{arg}'")
+                
+    logging.basicConfig(level=log_level)
+
     sim = Simulation([ Player(name, ActionLayer(), PreferProvincesBuyLayer())
         for name in ['Lord Rattington', 'Lord Voldebot', 'Revenge Witch']],
-        empty3PlyrBaseKingdom)
+        empty3PlyrBaseKingdom, max_turns)
     sim.play()
