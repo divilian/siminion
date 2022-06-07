@@ -8,6 +8,7 @@ class Gold(Card):
         self.keywords |= { "Treasure" }
     def __str__(self):
         return "Gold"
+    @classmethod
     def cost(self):
         return 6
     def play(self):
@@ -20,6 +21,7 @@ class Silver(Card):
         self.keywords |= { "Treasure" }
     def __str__(self):
         return "Silver"
+    @classmethod
     def cost(self):
         return 3
     def play(self):
@@ -32,6 +34,7 @@ class Copper(Card):
         self.keywords |= { "Treasure" }
     def __str__(self):
         return "Copper"
+    @classmethod
     def cost(self):
         return 0
     def play(self):

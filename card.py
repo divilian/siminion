@@ -14,6 +14,7 @@ class Card():
         '''
         return 0
 
+    @classmethod
     def cost(self):
         '''
         Returns the number of coins required to buy this card.

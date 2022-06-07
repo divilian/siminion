@@ -9,6 +9,7 @@ class Province(Card):
         return "Province"
     def play(self):
         raise ValueError("Province can't be played")
+    @classmethod
     def cost(self):
         return 8
     def VPs(self):
@@ -22,6 +23,7 @@ class Duchy(Card):
         return "Duchy"
     def play(self):
         raise ValueError("Duchy can't be played")
+    @classmethod
     def cost(self):
         return 5
     def VPs(self):
@@ -35,6 +37,7 @@ class Estate(Card):
         return "Estate"
     def play(self):
         raise ValueError("Estate can't be played")
+    @classmethod
     def cost(self):
         return 2
     def VPs(self):
