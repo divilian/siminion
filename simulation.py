@@ -49,7 +49,7 @@ class Simulation():
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
-    sim = Simulation([ Player(name, ActionLayer(), BuyLayer())
+    sim = Simulation([ Player(name, ActionLayer(), PreferProvincesBuyLayer())
         for name in ['Lord Rattington', 'Lord Voldebot', 'Revenge Witch']],
         empty3PlyrBaseKingdom)
     sim.play()

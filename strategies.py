@@ -1,6 +1,7 @@
 
 from victories import *
 from treasures import *
+import logging
 
 class ActionLayer():
     def __init__(self):
@@ -44,8 +45,6 @@ class BuyLayer():
 
 
 class GreedyBuyLayer(BuyLayer):
-    def __init__(self, player):
-        super().__init__(player)
     def play(self, numStartingBuys=1):
         '''Play all treasure cards.'''
         treasureCards = self.player.deck.cardsInHandWithKeyword("Treasure")
@@ -54,13 +53,20 @@ class GreedyBuyLayer(BuyLayer):
         numBuys = numStartingBuys
         targets = self.getBuyTargets()
         for target in targets:
-            while numBuys >= 1 and target().cost() <= self.player.numCoins:
-                logging.debug(f"{self.player.playerName} buys a {target}")
-                self.player.deck.gain(target())
+            while numBuys >= 1 and target.cost() <= self.player.numCoins:
+                logging.debug(
+                    f"{self.player.playerName} buys a {target.__name__}")
+                self.player.deck.gain(target(self.player.deck))
                 self.player.numCoins -= target.cost()
+                numBuys -= 1
     def getBuyTargets(self):
         '''Return an ordered (prioritized) list of Card objects to try and buy.
            This layer will play all treasure cards, then buy as many copies of
            each card in the list as can be afforded, in order, until running
            out of buys.'''
         return [ ]    # (Default behavior: buy nothing.)
+
+class PreferProvincesBuyLayer(GreedyBuyLayer):
+    def getBuyTargets(self):
+        return [ Province, Gold, Duchy, Silver ]
+

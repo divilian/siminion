@@ -55,6 +55,9 @@ class Deck():
             for c in self.hand | self.playArea | set(self.discardPile) |
                 set(self.drawPile) ])
 
+    def gain(self, card):
+        self.discardPile = [card] + self.discardPile
+
     def __str__(self):
         ret_val = "  Hand:\n" + self.render(self.hand) + "\n" + \
             "  Draw pile:\n" + self.render(self.drawPile) + "\n" + \
