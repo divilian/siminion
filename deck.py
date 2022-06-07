@@ -45,6 +45,11 @@ class Deck():
         self.hand |= set(drawnCards)
         return drawnCards
 
+    def discardHand(self):
+        '''Dump the hand into the discard pile.'''
+        self.discardPile = list(self.hand) + self.discardPile
+        self.hand = set()
+
     def getVPTotal(self):
         return sum([ c.VPs()
             for c in self.hand | self.playArea | set(self.discardPile) |
