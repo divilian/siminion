@@ -50,6 +50,17 @@ class Deck():
         self.discardPile = list(self.hand) + self.discardPile
         self.hand = set()
 
+    def discardPlayArea(self):
+        '''Dump the cards in play area into the discard pile.'''
+        self.discardPile = list(self.playArea) + self.discardPile
+        self.playArea = set()
+
+    def doCleanupPhase(self):
+        '''Carry out "cleanup phase" in its entirety.'''
+        # TODO: Ask TJ if this is the right procedure.
+        self.discardHand()
+        self.discardPlayArea()
+
     def getVPTotal(self):
         return sum([ c.VPs()
             for c in self.hand | self.playArea | set(self.discardPile) |

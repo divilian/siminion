@@ -34,13 +34,14 @@ class Simulation():
                 f"({player.playerName}'s) turn {numTurns}")
             player.doActionPhase()
             player.doBuyPhase()
-            player.deck.discardHand()
+            player.deck.doCleanupPhase()
             player.deck.drawHand()
             logging.debug(f"{player.playerName}'s deck is now:\n{player.deck}")
             playerTurn = (playerTurn + 1) % len(self.players)
             if playerTurn == 0:
                 logging.info("==========================================")
                 numTurns += 1
+            logging.info("------------------------------------------")
 
     def __str__(self):
         return f"a {len(self.players)}-player simulation"
