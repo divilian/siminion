@@ -6,6 +6,7 @@ import logging
 from strategies import *
 from kingdom import Kingdom, empty3PlyrBaseKingdom
 import sys
+from sortedcollections import ValueSortedDict
 
 class Simulation():
 
@@ -17,8 +18,10 @@ class Simulation():
         self.kingdom = kingdom
 
     def play(self):
-        '''Run one simulated game, returning a dict from player names to final
-        scores.'''
+        '''Run one simulated game. This returns a tuple with two pieces of
+           information: (1) a dict from player names to final scores. (2) a
+           boolean indicating whether the game actually legally finished (as
+           opposed to being prematurely truncated by MAX_TURNS, e.g.)'''
 
         # Draw initial hands.
         for player in self.players:
@@ -44,8 +47,25 @@ class Simulation():
                 numTurns += 1
             logging.info("------------------------------------------")
 
+        return { p.playerName:p.deck.getVPTotal() for p in self.players }, \
+            self.kingdom.finished(len(self.players))
+
     def __str__(self):
         return f"a {len(self.players)}-player simulation"
+
+
+def printResults(results):
+    '''Pretty print the tuple returned from sim9) that has two pieces of
+       information: (1) a dict from player names to final scores. (2) a
+       boolean indicating whether the game actually legally finished (as
+       opposed to being prematurely truncated by MAX_TURNS, e.g.)'''
+    print("\n\n")
+    if results[1]:
+        print("Official match results:")
+    else:
+        print("Truncated (and unofficial) match results:")
+    for player, score in ValueSortedDict(results[0]).items():
+        print(f"  {player}: {score}")
 
 
 def printUsage():
@@ -73,4 +93,5 @@ if __name__ == "__main__":
     sim = Simulation([ Player(name, ActionLayer(), PreferProvincesBuyLayer())
         for name in ['Lord Rattington', 'Lord Voldebot', 'Revenge Witch']],
         empty3PlyrBaseKingdom, max_turns)
-    sim.play()
+    results = sim.play()
+    printResults(results)
