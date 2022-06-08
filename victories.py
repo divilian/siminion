@@ -1,12 +1,15 @@
 
 from card import *
 
+GREEN_ANSI_CODE = "\u001b[32m"
+RESET_ANSI_CODE = "\u001b[0m"
+
 class Province(Card):
     def __init__(self, deck):
         super().__init__(deck)
         self.keywords |= { "Victory" }
     def __str__(self):
-        return "Province"
+        return f"{GREEN_ANSI_CODE}Province{RESET_ANSI_CODE}"
     def play(self):
         raise ValueError("Province can't be played")
     @classmethod
@@ -20,7 +23,7 @@ class Duchy(Card):
         super().__init__(deck)
         self.keywords |= { "Victory" }
     def __str__(self):
-        return "Duchy"
+        return f"{GREEN_ANSI_CODE}Duchy{RESET_ANSI_CODE}"
     def play(self):
         raise ValueError("Duchy can't be played")
     @classmethod
@@ -34,7 +37,7 @@ class Estate(Card):
         super().__init__(deck)
         self.keywords |= { "Victory" }
     def __str__(self):
-        return "Estate"
+        return f"{GREEN_ANSI_CODE}Estate{RESET_ANSI_CODE}"
     def play(self):
         raise ValueError("Estate can't be played")
     @classmethod
