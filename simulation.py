@@ -59,18 +59,23 @@ class Simulation():
         return f"a {len(self.players)}-player simulation"
 
 
-def printResults(results):
-    '''Pretty print the tuple returned from sim9) that has two pieces of
+def printResults(results, players):
+    '''Pretty print the tuple returned from sim() that has two pieces of
        information: (1) a dict from player names to final scores. (2) a
        boolean indicating whether the game actually legally finished (as
-       opposed to being prematurely truncated by MAX_TURNS, e.g.)'''
-    print("\n\n")
+       opposed to being prematurely truncated by MAX_TURNS, e.g.)
+       If in debug logging mode, print entire players at end of game.'''
+    print("\n")
     if results[1]:
         print("Official match results:")
     else:
         print("Truncated (and unofficial) match results:")
-    for player, score in ValueSortedDict(results[0]).items():
-        print(f"  {player}: {score}")
+    for playerName, score in ValueSortedDict(results[0]).items():
+        print(f"  {playerName}: {score}")
+    print("\n")
+    for player in players:
+        logging.debug(player)
+        logging.debug("\n")
 
 
 def printUsage():
@@ -104,4 +109,4 @@ if __name__ == "__main__":
 
     sim = Simulation(players, empty3PlyrBaseKingdom, max_turns)
     results = sim.play()
-    printResults(results)
+    printResults(results, players)
