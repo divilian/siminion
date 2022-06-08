@@ -85,7 +85,7 @@ def printUsage():
 
 if __name__ == "__main__":
     log_level = logging.INFO
-    max_turns = 5
+    max_turns = 1e9   # We'll call this "infinity" (i.e., never stop sim)
     players = []
     for arg in sys.argv[1:]:
         if "=" not in arg:
