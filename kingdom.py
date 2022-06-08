@@ -30,6 +30,10 @@ class Kingdom():
         '''Return the number of cards left of the Card class passed.'''
         return self.piles[card.__name__].numRemaining
 
+empty2PlyrBaseKingdom = Kingdom(
+    { Province:8, Duchy:8, Estate:8,
+      Gold:30, Silver:40, Copper:46 })
+      
 empty3PlyrBaseKingdom = Kingdom(
     { Province:12, Duchy:12, Estate:12,
       Gold:30, Silver:40, Copper:40 })

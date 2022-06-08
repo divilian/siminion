@@ -4,7 +4,7 @@ from player import Player
 import random
 import logging
 from strategies import *
-from kingdom import Kingdom, empty3PlyrBaseKingdom
+from kingdom import Kingdom, empty3PlyrBaseKingdom, empty2PlyrBaseKingdom
 import sys
 from sortedcollections import ValueSortedDict
 
@@ -107,6 +107,6 @@ if __name__ == "__main__":
                 
     logging.basicConfig(level=log_level)
 
-    sim = Simulation(players, empty3PlyrBaseKingdom, max_turns)
+    sim = Simulation(players, empty2PlyrBaseKingdom, max_turns)
     results = sim.play()
     printResults(results, players)
