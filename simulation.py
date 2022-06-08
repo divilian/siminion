@@ -74,17 +74,21 @@ def printResults(results):
 
 
 def printUsage():
-    print("Usage: simulation.py\n"
+    print("Usage: simulation.py player1[.json], player2[.json] ...\n"
         "    [log_level=INFO|DEBUG]\n"
         "    [max_turns=#].")
 
 if __name__ == "__main__":
     log_level = logging.INFO
     max_turns = 5
+    players = []
     for arg in sys.argv[1:]:
         if "=" not in arg:
-            printUsage()
-            sys.exit(f"Bad arg '{arg}'")
+            try:
+                players += [Player.fromJsonFile(arg)]
+            except: 
+                printUsage()
+                sys.exit(f"Bad arg '{arg}'")
         elif arg.startswith("log_level"):
             log_level = getattr(logging, arg.split("=")[1])
         elif arg.startswith("max_turns"):
@@ -92,11 +96,12 @@ if __name__ == "__main__":
         else:
             printUsage()
             sys.exit(f"Bad arg '{arg}'")
+    if len(players) < 2:
+        printUsage()
+        sys.exit(f"Fewer than two players specified.")
                 
     logging.basicConfig(level=log_level)
 
-    sim = Simulation([ Player(name, ActionLayer(), PreferProvincesBuyLayer())
-        for name in ['Lord Rattington', 'Lord Voldebot', 'Revenge Witch']],
-        empty3PlyrBaseKingdom, max_turns)
+    sim = Simulation(players, empty3PlyrBaseKingdom, max_turns)
     results = sim.play()
     printResults(results)
