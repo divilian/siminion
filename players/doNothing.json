@@ -1,0 +1,9 @@
+{
+    "playerName":"doNothing",
+    "actionLayers": [
+        "DoNothingActionLayer"
+    ],
+    "buyLayers": [
+        "DoNothingBuyLayer"
+    ]
+}

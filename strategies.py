@@ -5,16 +5,26 @@ import logging
 
 class ActionLayer():
     def __init__(self):
-        pass
+        self.nextLayer = None
+    def setNextLayer(self, nextLayer):
+        self.nextLayer = nextLayer
     def setPlayer(self, player):
         '''This is somewhat awkward...after the layer's Player object has been
            instantiated, the layer -- and all Decorator-enclosed ones -- must
            be told who that player is.'''
         self.player = player
+        if self.nextLayer:
+            self.nextLayer.setPlayer(player)
     def play(self, numStartingActions=1):
         '''Complete this player's entire current action phase, deferring to
            lower layers if necessary.'''
-        return True
+        if self.nextLayer:
+            self.nextLayer.play()
+    def __str__(self):
+        if self.nextLayer:
+            return type(self).__name__ + " -> " + self.nextLayer.__str__()
+        else:
+            return type(self).__name__
 
 class RandomActionLayer(ActionLayer):
     def __init__(self):
@@ -29,19 +39,46 @@ class RandomActionLayer(ActionLayer):
             if numActions <= 0:
                 return
 
+class DoNothingActionLayer(ActionLayer):
+    def __init__(self):
+        super().__init__()
+    def play(self, numStartingActions=1):
+        return 
+
+class TestMeActionLayer(ActionLayer):
+    def __init__(self):
+        super().__init__()
+    def play(self, numStartingActions=1):
+        return 
+
 
 class BuyLayer():
     def __init__(self):
-        pass
+        self.nextLayer = None
+    def setNextLayer(self, nextLayer):
+        self.nextLayer = nextLayer
     def setPlayer(self, player):
         '''This is somewhat awkward...after the layer's Player object has been
            instantiated, the layer -- and all Decorator-enclosed ones -- must
            be told who that player is.'''
         self.player = player
+        if self.nextLayer:
+            self.nextLayer.setPlayer(player)
     def play(self):
         '''Complete this player's entire current buy phase, deferring to
            lower layers if necessary.'''
         return True
+    def __str__(self):
+        if self.nextLayer:
+            return type(self).__name__ + " -> " + self.nextLayer.__str__()
+        else:
+            return type(self).__name__
+
+class DoNothingBuyLayer(BuyLayer):
+    def __init__(self):
+        super().__init__()
+    def play(self, numStartingBuys=1):
+        return 
 
 
 class GreedyBuyLayer(BuyLayer):
