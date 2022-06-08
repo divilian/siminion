@@ -9,12 +9,19 @@ from pathlib import Path
 
 class Player():
     PLAYERS_DIR = Path("players")
+    playerNames = set()
     def __init__(self, playerName, topActionLayer, topBuyLayer,
         populator=basePopulator):
         '''playerName is a string. topActionLayer and topBuyLayer are each the
            top item in two Decorator-pattern hierarchies, specifying the
            player's strategy.'''
-        self.playerName = playerName
+        ext = 2
+        finalPlayerName = playerName
+        while finalPlayerName in Player.playerNames:
+            finalPlayerName = playerName + str(ext)
+            ext += 1
+        Player.playerNames |= { finalPlayerName }
+        self.playerName = finalPlayerName
         self.topActionLayer = topActionLayer
         self.topActionLayer.setPlayer(self)   # Add reverse pointer
         self.topBuyLayer = topBuyLayer
