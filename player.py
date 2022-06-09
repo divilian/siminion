@@ -35,22 +35,14 @@ class Player():
             filename += ".json"
         with open(Player.PLAYERS_DIR / filename, "r", encoding="utf-8") as f:
             data = json.load(f)
-        actionLayers = Player.buildActionLayers(data['actionLayers'])
-        buyLayers = Player.buildBuyLayers(data['buyLayers'])
+        actionLayers = Player.buildLayers(data['actionLayers'])
+        buyLayers = Player.buildLayers(data['buyLayers'])
         return Player(data['playerName'], actionLayers, buyLayers)
     @classmethod
-    def buildActionLayers(cls, actionLayerNames):
+    def buildLayers(cls, layerNames):
         lowerLayer = None
-        for name in reversed(actionLayerNames):
-            newLayer = getattr(strategies,name)()
-            newLayer.setNextLayer(lowerLayer)
-            lowerLayer = newLayer
-        return lowerLayer
-    @classmethod
-    def buildBuyLayers(cls, buyLayerNames):
-        lowerLayer = None
-        for name in reversed(buyLayerNames):
-            newLayer = getattr(strategies,name)()
+        for name, args in reversed(layerNames):
+            newLayer = getattr(strategies,name)(args)
             newLayer.setNextLayer(lowerLayer)
             lowerLayer = newLayer
         return lowerLayer

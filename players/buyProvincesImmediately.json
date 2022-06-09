@@ -1,9 +1,0 @@
-{
-    "playerName":"buyProvincesImmediately",
-    "actionLayers": [
-        "DoNothingActionLayer"
-    ],
-    "buyLayers": [
-        "PreferProvincesBuyLayer"
-    ]
-}
