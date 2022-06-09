@@ -1,9 +1,9 @@
 {
     "playerName":"buyProvincesImmediately",
     "actionLayers": [
-        "DoNothingActionLayer"
+        [ "DoNothingActionLayer", [ ] ]
     ],
     "buyLayers": [
-        "PreferProvincesBuyLayer"
+        [ "GreedyBuyLayer", [ "Province", "Gold", "Duchy", "Silver" ]]
     ]
 }

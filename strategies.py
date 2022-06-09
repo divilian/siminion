@@ -4,7 +4,8 @@ from treasures import *
 import logging
 
 class ActionLayer():
-    def __init__(self):
+    def __init__(self, args):
+        super().__init__()
         self.nextLayer = None
     def setNextLayer(self, nextLayer):
         self.nextLayer = nextLayer
@@ -27,8 +28,8 @@ class ActionLayer():
             return type(self).__name__
 
 class RandomActionLayer(ActionLayer):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, args):
+        super().__init__(args)
     def play(self, numStartingActions=1):
         '''Play action cards at random until no more actions remain.'''
         actionCards = self.player.deck.cardsInHandWithKeyword("Action")
@@ -40,20 +41,21 @@ class RandomActionLayer(ActionLayer):
                 return
 
 class DoNothingActionLayer(ActionLayer):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, args):
+        super().__init__(args)
     def play(self, numStartingActions=1):
         return 
 
 class TestMeActionLayer(ActionLayer):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, args):
+        super().__init__(args)
     def play(self, numStartingActions=1):
         return 
 
 
 class BuyLayer():
-    def __init__(self):
+    def __init__(self, args):
+        super().__init__()
         self.nextLayer = None
     def setNextLayer(self, nextLayer):
         self.nextLayer = nextLayer
@@ -75,21 +77,27 @@ class BuyLayer():
             return type(self).__name__
 
 class DoNothingBuyLayer(BuyLayer):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, args):
+        super().__init__(args)
     def play(self, numStartingBuys=1):
         return 
 
 
 class GreedyBuyLayer(BuyLayer):
+    def __init__(self, buyTargets):
+        '''buyTargets is an ordered (prioritized) list of Card class names
+           to try and buy. This layer will play all treasure cards, then buy
+           as many copies of each card in the list as can be afforded, in
+           order, until running out of buys.'''
+        super().__init__(args)
+        self.buyTargets = buyTargets
     def play(self, numStartingBuys=1):
         '''Play all treasure cards.'''
         treasureCards = self.player.deck.cardsInHandWithKeyword("Treasure")
         for tc in treasureCards:
             tc.play()
         numBuys = numStartingBuys
-        targets = self.getBuyTargets()
-        for target in targets:
+        for target in self.buyTargets:
             while (numBuys >= 1 and target.cost() <= self.player.numCoins
                     and self.player.kingdom.available(target) > 0):
                 logging.debug(
@@ -98,14 +106,4 @@ class GreedyBuyLayer(BuyLayer):
                     self.player.deck))
                 self.player.numCoins -= target.cost()
                 numBuys -= 1
-    def getBuyTargets(self):
-        '''Return an ordered (prioritized) list of Card objects to try and buy.
-           This layer will play all treasure cards, then buy as many copies of
-           each card in the list as can be afforded, in order, until running
-           out of buys.'''
-        return [ ]    # (Default behavior: buy nothing.)
-
-class PreferProvincesBuyLayer(GreedyBuyLayer):
-    def getBuyTargets(self):
-        return [ Province, Gold, Duchy, Silver ]
 
