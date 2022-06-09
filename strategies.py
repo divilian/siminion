@@ -3,9 +3,15 @@ from victories import *
 from treasures import *
 import logging
 
-class ActionLayer():
+class Layer():
     def __init__(self, args):
         super().__init__()
+    def convertNamesToClasses(self, classNames):
+        return [ globals()[className] for className in classNames ]
+
+class ActionLayer(Layer):
+    def __init__(self, args):
+        super().__init__(args)
         self.nextLayer = None
     def setNextLayer(self, nextLayer):
         self.nextLayer = nextLayer
@@ -53,9 +59,9 @@ class TestMeActionLayer(ActionLayer):
         return 
 
 
-class BuyLayer():
+class BuyLayer(Layer):
     def __init__(self, args):
-        super().__init__()
+        super().__init__(args)
         self.nextLayer = None
     def setNextLayer(self, nextLayer):
         self.nextLayer = nextLayer
@@ -84,13 +90,13 @@ class DoNothingBuyLayer(BuyLayer):
 
 
 class GreedyBuyLayer(BuyLayer):
-    def __init__(self, buyTargets):
-        '''buyTargets is an ordered (prioritized) list of Card class names
+    def __init__(self, buyTargetNames):
+        '''buyTargetNames is an ordered (prioritized) list of Card class names
            to try and buy. This layer will play all treasure cards, then buy
            as many copies of each card in the list as can be afforded, in
            order, until running out of buys.'''
-        super().__init__(args)
-        self.buyTargets = buyTargets
+        super().__init__(buyTargetNames)
+        self.buyTargets = self.convertNamesToClasses(buyTargetNames)
     def play(self, numStartingBuys=1):
         '''Play all treasure cards.'''
         treasureCards = self.player.deck.cardsInHandWithKeyword("Treasure")
