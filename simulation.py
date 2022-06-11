@@ -77,8 +77,9 @@ def printResults(results, players):
         print("Official match results:")
     else:
         print("Truncated (and unofficial) match results:")
-    for playerName, score in ValueSortedDict(results[0]).items():
-        print(f"  {playerName}: {score}")
+    maxNameLen = max([ len(pn) for pn in results[0].keys() ])
+    for playerName in reversed(ValueSortedDict(results[0])):
+        print(f"  {playerName:<{maxNameLen}}: {results[0][playerName]:3d}")
     print("\n")
     for player in players:
         logging.debug(player)
