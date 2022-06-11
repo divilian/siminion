@@ -1,0 +1,10 @@
+{
+    "playerName":"greedyPDE",
+    "description": "Buy provinces, duchies, and estates as soon as possible, preferring most expensive card. Accumulate treasure in priority order of decreasing value otherwise.",
+    "actionLayers": [
+        [ "DoNothingActionLayer", [ ] ]
+    ],
+    "buyLayers": [
+        [ "GreedyBuyLayer", [ "Province", "Gold", "Duchy", "Silver" ]]
+    ]
+}

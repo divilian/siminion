@@ -1,9 +1,0 @@
-{
-    "playerName":"greedyProvinceDuchyBuyer",
-    "actionLayers": [
-        [ "DoNothingActionLayer", [ ] ]
-    ],
-    "buyLayers": [
-        [ "GreedyBuyLayer", [ "Province", "Gold", "Duchy", "Silver" ]]
-    ]
-}
