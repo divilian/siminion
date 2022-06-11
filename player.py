@@ -10,7 +10,7 @@ from pathlib import Path
 class Player():
     PLAYERS_DIR = Path("players")
     playerNames = set()
-    def __init__(self, playerName, topActionLayer, topBuyLayer,
+    def __init__(self, playerName, topActionLayer, topBuyLayer, kingdom,
         populator=basePopulator):
         '''playerName is a string. topActionLayer and topBuyLayer are each the
            top item in two Decorator-pattern hierarchies, specifying the
@@ -28,16 +28,17 @@ class Player():
         self.topBuyLayer.player = self      # Add reverse pointer
         self.deck = Deck(self, populator)
         self.numCoins = 0   # The currently "played" number of coins this turn
+        self.kingdom = kingdom
 
     @classmethod
-    def fromJsonFile(cls, filename):
+    def fromJsonFile(cls, filename, kingdom):
         if not filename.endswith(".json"):
             filename += ".json"
         with open(Player.PLAYERS_DIR / filename, "r", encoding="utf-8") as f:
             data = json.load(f)
         actionLayers = Player.buildLayers(data['actionLayers'])
         buyLayers = Player.buildLayers(data['buyLayers'])
-        return Player(data['playerName'], actionLayers, buyLayers)
+        return Player(data['playerName'], actionLayers, buyLayers, kingdom)
     @classmethod
     def buildLayers(cls, layerNames):
         lowerLayer = None
@@ -55,8 +56,6 @@ class Player():
         self.topBuyLayer.play()
     def getVPTotal(self):
         return self.deck.getVPTotal()
-    def setKingdom(self, kingdom):
-        self.kingdom = kingdom
     def __str__(self):
         return ("Player " + self.playerName + "\n" +
             "ActionLayers: " + str(self.topActionLayer) + "\n" +

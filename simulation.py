@@ -4,26 +4,33 @@ from player import Player
 import random
 import logging
 from strategies import *
-from kingdom import Kingdom, empty3PlyrBaseKingdom, empty2PlyrBaseKingdom
+from kingdom import Kingdom, empty3PlyrBaseKSpec, empty2PlyrBaseKSpec
 import sys
 from sortedcollections import ValueSortedDict
+import json
+from pathlib import Path
 
 class Simulation():
 
-    def __init__(self, players, kingdom, max_turns=5):
-        '''players is a set of Player objects. kingdom is a Kingdom.'''
+    def __init__(self, playerSpecs, kingdomSpec, max_turns=5):
+        '''players is a set of JSON filenames, each of which holds the
+           specification for a Player object. kingdomSpec is a dict of Card
+           classes and quantities, suitable as the constructor arg to the
+           Kingdom class.'''
         self.MAX_TURNS = max_turns   # After more than this, force-stop sim.
-        self.players = list(players)
-        random.shuffle(self.players)   # Players start in random order
-        self.kingdom = kingdom
-        for player in self.players:
-            player.setKingdom(self.kingdom)   # TODO: yuck?
+        self.playerSpecs = list(playerSpecs)
+        self.kingdomSpec = kingdomSpec
 
     def play(self):
         '''Run one simulated game. This returns a tuple with two pieces of
            information: (1) a dict from player names to final scores. (2) a
            boolean indicating whether the game actually legally finished (as
            opposed to being prematurely truncated by MAX_TURNS, e.g.)'''
+        self.kingdom = Kingdom(self.kingdomSpec)
+        Player.playerNames = set()
+        self.players = [ Player.fromJsonFile(spec, self.kingdom)
+            for spec in self.playerSpecs ]
+        random.shuffle(self.players)   # Players start in random order
 
         # Draw initial hands.
         for player in self.players:
@@ -86,14 +93,14 @@ def printUsage():
 if __name__ == "__main__":
     log_level = logging.INFO
     max_turns = 1e9   # We'll call this "infinity" (i.e., never stop sim)
-    players = []
+    playerSpecs = []
     for arg in sys.argv[1:]:
         if "=" not in arg:
-            try:
-                players += [Player.fromJsonFile(arg)]
-            except: 
-                printUsage()
-                sys.exit(f"Bad arg '{arg}'")
+            if not arg.endswith(".json"):
+                arg += ".json"
+            path = Path(Player.PLAYERS_DIR / arg)
+            assert path.is_file(), f"No such player file {path}."
+            playerSpecs += [arg]
         elif arg.startswith("log_level"):
             log_level = getattr(logging, arg.split("=")[1])
         elif arg.startswith("max_turns"):
@@ -101,12 +108,12 @@ if __name__ == "__main__":
         else:
             printUsage()
             sys.exit(f"Bad arg '{arg}'")
-    if len(players) < 2:
+    if len(playerSpecs) < 2:
         printUsage()
         sys.exit(f"Fewer than two players specified.")
                 
     logging.basicConfig(level=log_level)
 
-    sim = Simulation(players, empty2PlyrBaseKingdom, max_turns)
+    sim = Simulation(playerSpecs, empty2PlyrBaseKSpec, max_turns)
     results = sim.play()
-    printResults(results, players)
+    printResults(results, sim.players)
