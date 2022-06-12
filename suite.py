@@ -31,7 +31,8 @@ class Suite():
 
     NUM_CORES = 12
 
-    def __init__(self, sim, baseSeed=1, numMatches=100):
+    def __init__(self, sim, baseSeed=1, numMatches=100,
+            log_level=logging.CRITICAL):
         '''sim is an entire Simulation object, instantiated in the usual 
            way. baseSeed is the first random seed to be used in the sequence
            of matches; others follow sequentially. numMatches is the total
@@ -39,6 +40,7 @@ class Suite():
         self.sim = sim
         self.baseSeed = baseSeed
         self.numMatches = numMatches
+        self.log_level = log_level
 
     def run(self):
         numRunsPerCore = math.ceil(self.numMatches / Suite.NUM_CORES)
@@ -53,6 +55,7 @@ class Suite():
             outputFile = f"/tmp/output{startSeed:04d}.csv"
             cmdLine = [ 'python', './suite.py', f"{startSeed}:{endSeed}" ] +\
                 [ p for p in self.sim.playerSpecs ] + \
+                [ 'log_level='+str(self.log_level) ] + \
                 [ 'maxTurns='+str(self.sim.maxTurns) ]
             procs.append(subprocess.Popen(cmdLine))
             outputFiles.append(outputFile)
@@ -68,6 +71,8 @@ class Suite():
         results.to_csv(f"/tmp/siminion{self.baseSeed}.csv",mode="w",
             encoding="utf-8", index=None)
         logging.critical(f"Results in /tmp/siminion{self.baseSeed}.csv.")
+        for ofile in outputFiles:
+            Path(ofile).unlink()
         return results
 
 
@@ -92,7 +97,6 @@ if __name__ == "__main__":
         start,end = [ int(s) for s in sys.argv[1].split(':') ]
         seeds = range(start,end+1)
         for arg in sys.argv[2:]:
-            print(f"Checking {arg}...")
             if "=" not in arg:
                 if not arg.endswith(".json"):
                     arg += ".json"
@@ -100,7 +104,7 @@ if __name__ == "__main__":
                 assert path.is_file(), f"No such player file {path}."
                 playerSpecs += [arg]
             elif arg.startswith("log_level"):
-                log_level = getattr(logging, arg.split("=")[1])
+                log_level = int(arg.split("=")[1])
             elif arg.startswith("maxTurns"):
                 maxTurns = int(arg.split("=")[1])
             else:
@@ -109,9 +113,9 @@ if __name__ == "__main__":
         if len(playerSpecs) < 2:
             printUsage()
             sys.exit(f"Fewer than two players specified.")
-    except:
+    except Exception as e:
         printUsage()
-        sys.exit()
+        sys.exit(e)
 
                 
     logging.basicConfig(level=log_level)

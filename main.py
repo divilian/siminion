@@ -57,5 +57,5 @@ if __name__ == "__main__":
     logging.basicConfig(level=log_level)
 
     sim = Simulation(playerSpecs, empty2PlyrBaseKSpec, int(maxTurns))
-    suite = Suite(sim, startSeed, numMatches)
+    suite = Suite(sim, startSeed, numMatches, log_level)
     bob = suite.run()
