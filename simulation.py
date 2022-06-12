@@ -22,11 +22,9 @@ class Simulation():
         self.playerSpecs = list(playerSpecs)
         self.kingdomSpec = kingdomSpec
 
-    def play(self):
-        '''Run one simulated game. This returns a tuple with two pieces of
-           information: (1) a dict from player names to final scores. (2) a
-           boolean indicating whether the game actually legally finished (as
-           opposed to being prematurely truncated by MAX_TURNS, e.g.)'''
+    def play(self, seed=1):
+        '''Run one simulated game, and return scores and statistics from it.'''
+        self.seed = seed
         self.kingdom = Kingdom(self.kingdomSpec)
         Player.playerNames = set()
         self.players = [ Player.fromJsonFile(spec, self.kingdom)
@@ -60,27 +58,25 @@ class Simulation():
                 numTurns += 1
             logging.info("------------------------------------------")
 
-        return { p.playerName:p.deck.getVPTotal() for p in self.players }, \
-            self.kingdom.finished(len(self.players))
+        return { 'seed':seed } | \
+            { p.playerName:p.deck.getVPTotal() for p in self.players } | \
+            { 'finished':self.kingdom.finished(len(self.players)) }
 
     def __str__(self):
         return f"a {len(self.players)}-player simulation"
 
 
 def printResults(results, players):
-    '''Pretty print the tuple returned from sim() that has two pieces of
-       information: (1) a dict from player names to final scores. (2) a
-       boolean indicating whether the game actually legally finished (as
-       opposed to being prematurely truncated by maxTurns, e.g.)
-       If in debug logging mode, print entire players at end of game.'''
+    '''Pretty print the stats returned from play().'''
     print("\n")
-    if results[1]:
+    if results['finished']:
         print("Official match results:")
     else:
         print("Truncated (and unofficial) match results:")
-    maxNameLen = max([ len(pn) for pn in results[0].keys() ])
-    for playerName in reversed(ValueSortedDict(results[0])):
-        print(f"  {playerName:<{maxNameLen}}: {results[0][playerName]:3d}")
+    playersDict = { p.playerName:results[p.playerName] for p in players }
+    maxNameLen = max([ len(p.playerName) for p in players ])
+    for playerName in reversed(ValueSortedDict(playersDict)):
+        print(f"  {playerName:<{maxNameLen}}: {playersDict[playerName]:3d}")
     print("\n")
     for player in players:
         logging.debug(player)
