@@ -65,7 +65,7 @@ class Suite():
         results = pd.DataFrame({ col:[] for col in cols })
         results = pd.concat([ pd.read_csv(ofile, encoding="utf-8")
             for ofile in outputFiles ])
-        results.to_csv(f"/tmp/siminion{self.baseSeed}.csv",mode="a",
+        results.to_csv(f"/tmp/siminion{self.baseSeed}.csv",mode="w",
             encoding="utf-8", index=None)
         logging.critical(f"Results in /tmp/siminion{self.baseSeed}.csv.")
         return results
