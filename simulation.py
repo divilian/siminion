@@ -10,14 +10,15 @@ from sortedcollections import ValueSortedDict
 import json
 from pathlib import Path
 
+
 class Simulation():
 
-    def __init__(self, playerSpecs, kingdomSpec, max_turns=5):
+    def __init__(self, playerSpecs, kingdomSpec, maxTurns=5):
         '''players is a set of JSON filenames, each of which holds the
            specification for a Player object. kingdomSpec is a dict of Card
            classes and quantities, suitable as the constructor arg to the
            Kingdom class.'''
-        self.MAX_TURNS = max_turns   # After more than this, force-stop sim.
+        self.maxTurns = maxTurns   # After more than this, force-stop sim.
         self.playerSpecs = list(playerSpecs)
         self.kingdomSpec = kingdomSpec
 
@@ -40,7 +41,7 @@ class Simulation():
         playerTurn = 0
 
         logging.info("==========================================")
-        while (numTurns < self.MAX_TURNS and
+        while (numTurns < self.maxTurns and
                 not self.kingdom.finished(len(self.players))):
             player = self.players[playerTurn]
             logging.info(f"Beginning player {playerTurn}'s " +
@@ -70,7 +71,7 @@ def printResults(results, players):
     '''Pretty print the tuple returned from sim() that has two pieces of
        information: (1) a dict from player names to final scores. (2) a
        boolean indicating whether the game actually legally finished (as
-       opposed to being prematurely truncated by MAX_TURNS, e.g.)
+       opposed to being prematurely truncated by maxTurns, e.g.)
        If in debug logging mode, print entire players at end of game.'''
     print("\n")
     if results[1]:
@@ -89,11 +90,11 @@ def printResults(results, players):
 def printUsage():
     print("Usage: simulation.py player1[.json], player2[.json] ...\n"
         "    [log_level=INFO|DEBUG]\n"
-        "    [max_turns=#].")
+        "    [maxTurns=#].")
 
 if __name__ == "__main__":
     log_level = logging.INFO
-    max_turns = 1e9   # We'll call this "infinity" (i.e., never stop sim)
+    maxTurns = 1e9   # We'll call this "infinity" (i.e., never stop sim)
     playerSpecs = []
     for arg in sys.argv[1:]:
         if "=" not in arg:
@@ -104,8 +105,8 @@ if __name__ == "__main__":
             playerSpecs += [arg]
         elif arg.startswith("log_level"):
             log_level = getattr(logging, arg.split("=")[1])
-        elif arg.startswith("max_turns"):
-            max_turns = int(arg.split("=")[1])
+        elif arg.startswith("maxTurns"):
+            maxTurns = int(arg.split("=")[1])
         else:
             printUsage()
             sys.exit(f"Bad arg '{arg}'")
@@ -115,6 +116,6 @@ if __name__ == "__main__":
                 
     logging.basicConfig(level=log_level)
 
-    sim = Simulation(playerSpecs, empty2PlyrBaseKSpec, max_turns)
+    sim = Simulation(playerSpecs, empty2PlyrBaseKSpec, maxTurns)
     results = sim.play()
     printResults(results, sim.players)
