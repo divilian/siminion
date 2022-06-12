@@ -45,11 +45,13 @@ print(f"(Scores box plot written to {plotFilename}.)")
 ##############################################################################
 # Wins box plot.
 # Ick!
-winners = np.empty(len(scoresWide),dtype="object")
+winners = np.repeat("tie"+" "*max([ len(pn) for pn in PLAYER_COLS]),
+    len(scoresWide))
 for rownum in range(len(scoresWide)):
     for pn in PLAYER_COLS:
-        if all([ scoresWide.iloc[rownum][p] <= scoresWide.iloc[rownum][pn]
-                                                for p in PLAYER_COLS]):
+        if all([ p==pn or
+                scoresWide.iloc[rownum][p] < scoresWide.iloc[rownum][pn]
+                                    for p in PLAYER_COLS]):
             winners[rownum] = pn
 scoresWide['winner'] = winners
 plt.clf()
