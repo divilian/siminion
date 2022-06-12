@@ -40,7 +40,7 @@ if __name__ == "__main__":
             elif arg.startswith("maxTurns"):
                 maxTurns = int(arg.split("=")[1])
             elif arg.startswith("startSeed"):
-                startSeed = int(arg.split('=')[0])
+                startSeed = int(arg.split('=')[1])
             elif arg.startswith("numMatches"):
                 numMatches = int(arg.split('=')[1])
             else:
