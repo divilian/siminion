@@ -50,13 +50,13 @@ class DoNothingActionLayer(ActionLayer):
     def __init__(self, args):
         super().__init__(args)
     def play(self, numStartingActions=1):
-        return 
+        return
 
 class TestMeActionLayer(ActionLayer):
     def __init__(self, args):
         super().__init__(args)
     def play(self, numStartingActions=1):
-        return 
+        return
 
 
 class BuyLayer(Layer):
@@ -91,7 +91,7 @@ class DoNothingBuyLayer(BuyLayer):
     def __init__(self, args):
         super().__init__(args)
     def play(self, numStartingBuys=1):
-        return 
+        return
 
 
 class GreedyBuyLayer(BuyLayer):
@@ -114,4 +114,16 @@ class GreedyBuyLayer(BuyLayer):
                     self.player.deck))
                 self.player.numCoins -= target.cost()
                 numBuys -= 1
+
+class BuyProvincesAfterNGolds(GreedyBuyLayer):
+    def __init__(self, n):
+        '''Don't buy duchies or estates; and don't buy provinces until the
+        nth Gold card has been acquired.'''
+        super().__init__([ "Gold", "Silver" ])
+        self.targetNumGolds = int(n)
+    def play(self, numStartingBuys=1):
+        if self.player.deck.numCardsOfType(Gold) >= self.targetNumGolds:
+            self.buyTargets = self.convertNamesToClasses([ "Province",
+                "Gold", "Silver" ])
+        super().play(numStartingBuys)
 

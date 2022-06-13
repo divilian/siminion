@@ -1,0 +1,10 @@
+{
+    "playerName":"buyPAfter1Gold",
+    "description": "Buy provinces as soon as 1 Gold has been purchased. Accumulate treasure in priority order of decreasing value otherwise. Never buy duchies or estates.",
+    "actionLayers": [
+        [ "DoNothingActionLayer", [ ] ]
+    ],
+    "buyLayers": [
+        [ "BuyProvincesAfterNGolds", 1 ]
+    ]
+}
