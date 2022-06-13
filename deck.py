@@ -22,6 +22,16 @@ class Deck():
     def cardsInHandWithKeyword(self, keyword):
         return [ c for c in self.hand if keyword in c.keywords ]
 
+    def allCards(self):
+        return self.playArea | self.hand | set(self.discardPile) | \
+            set(self.drawPile)
+
+    def numCardsOfType(self, cardType):
+        '''Return the total number of cards this deck has of the Card class
+           passed: this includes cards in the hand, draw/discard, in play,
+           etc.'''
+        return len([ c for c in self.allCards() if type(c) is cardType ])
+
     def drawHand(self):
         '''
         Draw the requisite number of cards for a new hand, triggering a
@@ -62,9 +72,7 @@ class Deck():
         self.discardPlayArea()
 
     def getVPTotal(self):
-        return sum([ c.VPs()
-            for c in self.hand | self.playArea | set(self.discardPile) |
-                set(self.drawPile) ])
+        return sum([ c.VPs() for c in self.allCards() ])
 
     def gain(self, card):
         self.discardPile = [card] + self.discardPile

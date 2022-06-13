@@ -76,6 +76,11 @@ class BuyLayer(Layer):
         '''Complete this player's entire current buy phase, deferring to
            lower layers if necessary.'''
         return True
+    def playAllTreasures(self):
+        '''Play all treasure cards.'''
+        treasureCards = self.player.deck.cardsInHandWithKeyword("Treasure")
+        for tc in treasureCards:
+            tc.play()
     def __str__(self):
         if self.nextLayer:
             return type(self).__name__ + " -> " + self.nextLayer.__str__()
@@ -98,10 +103,7 @@ class GreedyBuyLayer(BuyLayer):
         super().__init__(buyTargetNames)
         self.buyTargets = self.convertNamesToClasses(buyTargetNames)
     def play(self, numStartingBuys=1):
-        '''Play all treasure cards.'''
-        treasureCards = self.player.deck.cardsInHandWithKeyword("Treasure")
-        for tc in treasureCards:
-            tc.play()
+        self.playAllTreasures()
         numBuys = numStartingBuys
         for target in self.buyTargets:
             while (numBuys >= 1 and target.cost() <= self.player.numCoins
