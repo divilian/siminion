@@ -6,6 +6,7 @@ from pathlib import Path
 from player import Player
 from simulation import Simulation
 from kingdom import empty2PlyrBaseKSpec, empty3PlyrBaseKSpec
+from genPlots import genPlots
 
 
 # Run an entire suite of sims.
@@ -16,6 +17,7 @@ def printUsage():
         "    [numMatches=100]\n"
         "    [log_level=DEBUG|INFO]\n"
         "    [maxTurns=#]\n"
+        "    [doPlots=False]\n"
         "    [startSeed=#].")
 
 if __name__ == "__main__":
@@ -25,6 +27,7 @@ if __name__ == "__main__":
             sys.exit(f"Only {len(sys.argv)} args given.")
         numMatches = 100
         log_level = logging.INFO
+        doPlots = False
         startSeed = 1
         maxTurns = 1e9   # We'll call this "infinity" (i.e., never stop sim)
         playerSpecs = []
@@ -43,6 +46,8 @@ if __name__ == "__main__":
                 startSeed = int(arg.split('=')[1])
             elif arg.startswith("numMatches"):
                 numMatches = int(arg.split('=')[1])
+            elif arg.startswith("doPlots"):
+                doPlots = arg.split('=')[1].lower() == "true"
             else:
                 printUsage()
                 sys.exit(f"Bad arg '{arg}'")
@@ -58,4 +63,6 @@ if __name__ == "__main__":
 
     sim = Simulation(playerSpecs, empty2PlyrBaseKSpec, int(maxTurns))
     suite = Suite(sim, startSeed, numMatches, log_level)
-    bob = suite.run()
+    filename = suite.run()
+    if doPlots:
+        genPlots(filename)

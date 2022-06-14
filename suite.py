@@ -32,7 +32,7 @@ class Suite():
     NUM_CORES = 12
 
     def __init__(self, sim, baseSeed=1, numMatches=100,
-            log_level=logging.CRITICAL):
+            log_level=logging.CRITICAL, outputFilenamePrefix="siminion"):
         '''sim is an entire Simulation object, instantiated in the usual 
            way. baseSeed is the first random seed to be used in the sequence
            of matches; others follow sequentially. numMatches is the total
@@ -41,8 +41,11 @@ class Suite():
         self.baseSeed = baseSeed
         self.numMatches = numMatches
         self.log_level = log_level
+        self.prefix = outputFilenamePrefix
 
     def run(self):
+        '''Run the entire suite of sims, on NUM_CORES cores. Return the 
+           fully-qualified path name to the output file with results.'''
         numRunsPerCore = math.ceil(self.numMatches / Suite.NUM_CORES)
         startingSeedsForCore = [ self.baseSeed + i*numRunsPerCore
             for i in range(Suite.NUM_CORES) ]
@@ -68,12 +71,12 @@ class Suite():
         results = pd.DataFrame({ col:[] for col in cols })
         results = pd.concat([ pd.read_csv(ofile, encoding="utf-8")
             for ofile in outputFiles ])
-        results.to_csv(f"/tmp/siminion{self.baseSeed}.csv",mode="w",
-            encoding="utf-8", index=None)
-        logging.critical(f"Results in /tmp/siminion{self.baseSeed}.csv.")
+        filename = f"/tmp/{self.prefix}_{self.baseSeed}.csv"
+        results.to_csv(filename, mode="w", encoding="utf-8", index=None)
+        logging.critical(f"Results in {filename}.")
         for ofile in outputFiles:
             Path(ofile).unlink()
-        return results
+        return filename
 
 
 
